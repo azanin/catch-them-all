@@ -25,7 +25,8 @@ lazy val commonSettings = Seq(
     http4sDsl,
     http4sClient,
     catsEffect,
-    scalaTest
+    circeLiteral,
+    scalaTest % Test
   )
 )
 
