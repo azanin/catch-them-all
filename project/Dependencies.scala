@@ -9,6 +9,10 @@ object Dependencies {
 
   val scalaTestV = "3.2.2"
 
+  val http4sV = "0.21.15"
+
+  val circeV = "0.13.0"
+
   val scalaTest = "org.scalatest" %% "scalatest" % scalaTestV
 
   val catsEffect = "org.typelevel" %% "cats-effect" % catsV
@@ -16,4 +20,14 @@ object Dependencies {
   val kindProjector = "org.typelevel" %% "kind-projector" % kindProjectorV cross CrossVersion.full
 
   val betterMonadicFor = "com.olegpy" %% "better-monadic-for" % betterMonadicForV
+
+  val http4sDsl = "org.http4s" %% "http4s-dsl" % http4sV
+
+  val http4sServer = "org.http4s" %% "http4s-blaze-server" % http4sV
+
+  val http4sClient = "org.http4s" %% "http4s-blaze-client" % http4sV
+
+  val http4sCirce = "org.http4s" %% "http4s-circe" % http4sV
+
+  val circeLiteral = "io.circe" %% "circe-literal" % circeV
 }

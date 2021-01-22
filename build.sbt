@@ -19,7 +19,15 @@ lazy val commonSettings = Seq(
   scalafmtOnCompile := true,
   addCompilerPlugin(kindProjector),
   addCompilerPlugin(betterMonadicFor),
-  libraryDependencies ++= Seq(catsEffect, scalaTest)
+  libraryDependencies ++= Seq(
+    http4sServer,
+    http4sCirce,
+    http4sDsl,
+    http4sClient,
+    catsEffect,
+    circeLiteral,
+    scalaTest
+  )
 )
 
 lazy val core = project
