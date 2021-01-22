@@ -86,7 +86,7 @@ def dockerFile(dependsOn: File) = {
     add(dependsOn, artifactTargetPath)
     entryPoint("java", "-jar", artifactTargetPath)
     expose(80)
-    label("org.containers.image.source", "https://github.com/azanin/scalaApi")
+    label("org.containers.image.source", s"https://github.com/azanin/${projectName}")
   }
 }
 
