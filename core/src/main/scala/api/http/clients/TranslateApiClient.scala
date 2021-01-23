@@ -7,6 +7,7 @@ import org.http4s.client.Client
 import org.http4s.headers.`Content-Type`
 import Json._
 import api.http.clients.data.TranslateShakespeareResponse.ShakespeareResponse
+import ResponseHelper._
 
 trait TranslateApi {
   def translate(text: String): IO[ShakespeareResponse]
@@ -27,7 +28,7 @@ class TranslateApiClient private (private val httpClient: Client[IO], url: Uri) 
       )
     )
 
-    httpClient.expect[ShakespeareResponse](request)
+    httpClient.run(request).use(handleError[ShakespeareResponse])
   }
 }
 
