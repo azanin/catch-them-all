@@ -14,7 +14,7 @@ object Endpoints {
   val pokemonEndpoint: Endpoint[String, ErrorInfo, ShakespeareDescription, Any] =
     endpoint.get
       .in("pokemon")
-      .in(path[String]("pokemonName"))
+      .in(path[String]("pokemonName").validate(Validator.pattern("^[a-zA-Z].*")))
       .out(jsonBody[ShakespeareDescription])
       .errorOut(
         oneOf[ErrorInfo](
