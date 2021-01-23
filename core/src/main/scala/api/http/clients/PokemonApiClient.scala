@@ -7,7 +7,13 @@ import org.http4s.Uri
 import org.http4s.client.Client
 import Json._
 
-class PokemonApiClient private (private val httpClient: Client[IO], url: Uri) {
+trait PokemonApi {
+  def getPokemon(name: String): IO[Pokemon]
+
+  def getPokemonSpecies(name: String): IO[SpeciesDetail]
+}
+
+class PokemonApiClient private (private val httpClient: Client[IO], url: Uri) extends PokemonApi {
 
   def getPokemon(name: String): IO[Pokemon] = {
     val pokemonEndpoint = url.withPath(s"/pokemon/$name")

@@ -8,6 +8,10 @@ import org.http4s.headers.`Content-Type`
 import Json._
 import api.http.clients.data.TranslateShakespeareResponse.ShakespeareResponse
 
+trait TranslateApi {
+  def translate(text: String): IO[ShakespeareResponse]
+}
+
 class TranslateApiClient private (private val httpClient: Client[IO], url: Uri) {
 
   def translate(text: String): IO[ShakespeareResponse] = {
