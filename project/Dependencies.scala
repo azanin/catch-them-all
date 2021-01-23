@@ -19,6 +19,10 @@ object Dependencies {
 
   val logbackV = "1.2.3"
 
+  val testContainerV = "0.38.6"
+
+  val mockserverClientV = "5.11.2"
+
   val scalaTest = "org.scalatest" %% "scalatest" % scalaTestV
 
   val catsEffect = "org.typelevel" %% "cats-effect" % catsV
@@ -48,5 +52,11 @@ object Dependencies {
   val circeGeneric = "io.circe" %% "circe-generic" % circeV
 
   val logback = "ch.qos.logback" % "logback-classic" % logbackV % Runtime
+
+  val testContainers = "com.dimafeng" %% "testcontainers-scala-scalatest" % testContainerV
+
+  val mockServerClient = "org.mock-server" % "mockserver-client-java" % mockserverClientV
+
+  val mockServer = "com.dimafeng" %% "testcontainers-scala-mockserver" % testContainerV
 
 }

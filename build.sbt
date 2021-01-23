@@ -80,6 +80,13 @@ lazy val tests = project
   .configs(IntegrationTest)
   .settings(Defaults.itSettings)
   .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      testContainers,
+      mockServer,
+      mockServerClient
+    )
+  )
   .settings(parallelExecution in IntegrationTest := false)
   .enablePlugins(NoPublishPlugin)
   .settings(fork in IntegrationTest := true)
