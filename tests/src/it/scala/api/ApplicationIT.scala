@@ -4,7 +4,7 @@ import cats.effect.testing.scalatest.AsyncIOSpec
 import cats.effect.{ Blocker, IO }
 import com.dimafeng.testcontainers.{ Container, ForAllTestContainer, MultipleContainers }
 import org.http4s.Method.GET
-import org.http4s.Status.{ BadRequest, NotFound, Ok, ServiceUnavailable }
+import org.http4s.Status.{ BadRequest, InternalServerError, NotFound, Ok, ServiceUnavailable, TooManyRequests }
 import org.http4s.{ Request, Uri }
 import org.mockserver.model.HttpRequest.request
 import org.mockserver.model.HttpResponse.response
@@ -82,7 +82,7 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
     actual.asserting(response => assert(response.status == BadRequest))
   }
 
-  "Not existing pokemon: 404 status" in {
+  "Not existing pokemon: return 404 status" in {
 
     val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
       val pokemoneName = "notexisting"
@@ -112,7 +112,7 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
     actual.asserting(response => assert(response.status == NotFound))
   }
 
-  "Service unavailable: not parsable payload: 503 status" in {
+  "Internal Server error: not parsable payload 500 status" in {
 
     val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
       val pokemoneName = "ditto"
@@ -139,10 +139,40 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
       } yield response
     }
 
+    actual.asserting(response => assert(response.status == InternalServerError))
+  }
+
+  "Service unavailable: errors from dependent apis return 503 status" in {
+
+    val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
+      val pokemoneName = "ditto"
+
+      val expectations =
+        for {
+          exp1 <- IO(
+                    mockServerClient
+                      .when(request().withPath("/pokemon/" + pokemoneName))
+                      .respond(response().withStatusCode(500))
+                  )
+        } yield exp1
+
+      val httpRequest: Request[IO] = Request(
+        method = GET,
+        uri = Uri.unsafeFromString(
+          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemoneName"
+        )
+      )
+
+      for {
+        _        <- expectations
+        response <- httpClient.run(httpRequest).use(r => IO(r))
+      } yield response
+    }
+
     actual.asserting(response => assert(response.status == ServiceUnavailable))
   }
 
-  "Service unavailable: errors from dependent apis: 503 status" in {
+  "Too many requests: too many requesto to a dependent service return 429 status" in {
 
     val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
       val pokemoneName = "ditto"
@@ -169,7 +199,7 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
       } yield response
     }
 
-    actual.asserting(response => assert(response.status == ServiceUnavailable))
+    actual.asserting(response => assert(response.status == TooManyRequests))
   }
 
 }

@@ -1,7 +1,7 @@
 package api
 
 import api.domain.ShakespeareDescription
-import api.domain.errors.Errors.{ ErrorInfo, NotFound, ServiceUnavailable }
+import api.domain.errors.Errors.{ ErrorInfo, InternalServerError, NotFound, ServiceUnavailable, TooManyRequest }
 import sttp.tapir._
 import sttp.tapir.json.circe.jsonBody
 import io.circe.generic.auto._
@@ -19,7 +19,12 @@ object Endpoints {
       .errorOut(
         oneOf[ErrorInfo](
           statusMapping(StatusCode.NotFound, jsonBody[NotFound].description("not found")),
-          statusMapping(StatusCode.ServiceUnavailable, jsonBody[ServiceUnavailable].description("service unavailable"))
+          statusMapping(StatusCode.TooManyRequests, jsonBody[TooManyRequest].description("too many request")),
+          statusMapping(StatusCode.ServiceUnavailable, jsonBody[ServiceUnavailable].description("service unavailable")),
+          statusMapping(
+            StatusCode.InternalServerError,
+            jsonBody[InternalServerError].description("internal server error")
+          )
         )
       )
 }

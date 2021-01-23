@@ -25,7 +25,7 @@ class PokemonRoutes private (private val translatePokemon: TranslatePokemon)(imp
         }
         .handleErrorWith {
           case x: ErrorInfo => IO(x.asLeft)
-          case t            => IO(ServiceUnavailable(t.getMessage).asLeft)
+          case t            => IO(InternalServerError(t.getMessage).asLeft)
         }
     }
 }
