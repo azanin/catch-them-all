@@ -32,7 +32,10 @@ lazy val commonSettings = Seq(
     scalaTest,
     circeGeneric,
     cateEffectTesting,
-    logback
+    logback,
+    tepirOpenApi,
+    tapirOpenApiCirce,
+    tapirSwagger
   )
 )
 
