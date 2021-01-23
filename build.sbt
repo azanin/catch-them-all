@@ -20,6 +20,9 @@ lazy val commonSettings = Seq(
   addCompilerPlugin(kindProjector),
   addCompilerPlugin(betterMonadicFor),
   libraryDependencies ++= Seq(
+    tapirCore,
+    tapirHttp4sServer,
+    tapirJsonCirce,
     http4sServer,
     http4sCirce,
     http4sDsl,
@@ -27,7 +30,9 @@ lazy val commonSettings = Seq(
     catsEffect,
     circeLiteral,
     scalaTest,
-    cateEffectTesting
+    circeGeneric,
+    cateEffectTesting,
+    logback
   )
 )
 
@@ -75,6 +80,13 @@ lazy val tests = project
   .configs(IntegrationTest)
   .settings(Defaults.itSettings)
   .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      testContainers,
+      mockServer,
+      mockServerClient
+    )
+  )
   .settings(parallelExecution in IntegrationTest := false)
   .enablePlugins(NoPublishPlugin)
   .settings(fork in IntegrationTest := true)

@@ -7,15 +7,16 @@ import org.http4s.client.Client
 import org.http4s.headers.`Content-Type`
 import Json._
 import api.http.clients.data.TranslateShakespeareResponse.ShakespeareResponse
+import ResponseHelper._
 
 trait TranslateApi {
   def translate(text: String): IO[ShakespeareResponse]
 }
 
-class TranslateApiClient private (private val httpClient: Client[IO], url: Uri) {
+class TranslateApiClient private (private val httpClient: Client[IO], url: String) extends TranslateApi {
 
   def translate(text: String): IO[ShakespeareResponse] = {
-    val targetUri = url.withPath(s"/translate/shakespeare.json")
+    val targetUri = Uri.unsafeFromString(url).withPath(s"/translate/shakespeare.json")
 
     val request = Request[IO](
       method = POST,
@@ -27,10 +28,10 @@ class TranslateApiClient private (private val httpClient: Client[IO], url: Uri) 
       )
     )
 
-    httpClient.expect[ShakespeareResponse](request)
+    httpClient.run(request).use(handleError[ShakespeareResponse])
   }
 }
 
 object TranslateApiClient {
-  def apply(client: Client[IO], baseUri: Uri): TranslateApiClient = new TranslateApiClient(client, baseUri)
+  def apply(client: Client[IO], baseUri: String): TranslateApiClient = new TranslateApiClient(client, baseUri)
 }
