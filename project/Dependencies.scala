@@ -17,6 +17,8 @@ object Dependencies {
 
   val tapirV = "0.17.7"
 
+  val logbackV = "1.2.3"
+
   val scalaTest = "org.scalatest" %% "scalatest" % scalaTestV
 
   val catsEffect = "org.typelevel" %% "cats-effect" % catsV
@@ -43,6 +45,8 @@ object Dependencies {
 
   val tapirJsonCirce = "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % tapirV
 
-  val circeGeneric = "io.circe" %% "circe-generic" % circeV,
+  val circeGeneric = "io.circe" %% "circe-generic" % circeV
+
+  val logback = "ch.qos.logback" % "logback-classic" % logbackV % Runtime
 
 }

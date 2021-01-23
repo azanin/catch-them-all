@@ -14,6 +14,7 @@ class TranslatePokemonTest extends AsyncFreeSpec with AsyncIOSpec {
   "translate happy path" in {
 
     val expectedDescription = "description"
+    val anyPokemonName      = "anyPokemonName"
 
     val translateApiStub = new TranslateApi {
       override def translate(text: String): IO[ShakespeareResponse] = IO(
@@ -32,8 +33,8 @@ class TranslatePokemonTest extends AsyncFreeSpec with AsyncIOSpec {
         IO(SpeciesDetail(List(Description("a random description", Language("en")))))
     }
 
-    val expectedResult = Some(ShakespeareDescription(expectedDescription))
-    val actual         = TranslatePokemon(pokemonApiStub, translateApiStub).translateDescriptionOf("anyPokemonName")
+    val expectedResult = Some(ShakespeareDescription(anyPokemonName, expectedDescription))
+    val actual         = TranslatePokemon(pokemonApiStub, translateApiStub).translateDescriptionOf(anyPokemonName)
 
     actual.asserting(res => assert(res == expectedResult))
 

@@ -14,10 +14,10 @@ trait PokemonApi {
   def getPokemonSpecies(name: String): IO[SpeciesDetail]
 }
 
-class PokemonApiClient private (private val httpClient: Client[IO], url: Uri) extends PokemonApi {
+class PokemonApiClient private (private val httpClient: Client[IO], url: String) extends PokemonApi {
 
   def getPokemon(name: String): IO[Pokemon] = {
-    val pokemonEndpoint = url.withPath(s"/pokemon/$name")
+    val pokemonEndpoint = Uri.unsafeFromString(url + s"/pokemon/$name")
     val request         = Request[IO](
       Method.GET,
       pokemonEndpoint
@@ -27,7 +27,7 @@ class PokemonApiClient private (private val httpClient: Client[IO], url: Uri) ex
   }
 
   def getPokemonSpecies(name: String): IO[SpeciesDetail] = {
-    val speciesPokemonEndpoint = url.withPath(s"/pokemon-species/$name")
+    val speciesPokemonEndpoint = Uri.unsafeFromString(url + s"/pokemon-species/$name")
     val request                = Request[IO](
       Method.GET,
       speciesPokemonEndpoint
@@ -39,5 +39,5 @@ class PokemonApiClient private (private val httpClient: Client[IO], url: Uri) ex
 }
 
 object PokemonApiClient {
-  def apply(client: Client[IO], baseUri: Uri): PokemonApiClient = new PokemonApiClient(client, baseUri)
+  def apply(client: Client[IO], baseUri: String): PokemonApiClient = new PokemonApiClient(client, baseUri)
 }

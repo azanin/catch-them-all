@@ -16,7 +16,7 @@ class TranslatePokemon private (
       species         <- pokemonApiClient.getPokemonSpecies(pokemon.species.name)
       text             = species.descriptionFor("en")
       shakespeareText <- text.map(translateApiClient.translate).sequence
-    } yield shakespeareText.map(response => ShakespeareDescription(response.contents.translated))
+    } yield shakespeareText.map(response => ShakespeareDescription(name, response.contents.translated))
 
 }
 

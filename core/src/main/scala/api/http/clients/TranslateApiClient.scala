@@ -13,10 +13,10 @@ trait TranslateApi {
   def translate(text: String): IO[ShakespeareResponse]
 }
 
-class TranslateApiClient private (private val httpClient: Client[IO], url: Uri) extends TranslateApi {
+class TranslateApiClient private (private val httpClient: Client[IO], url: String) extends TranslateApi {
 
   def translate(text: String): IO[ShakespeareResponse] = {
-    val targetUri = url.withPath(s"/translate/shakespeare.json")
+    val targetUri = Uri.unsafeFromString(url).withPath(s"/translate/shakespeare.json")
 
     val request = Request[IO](
       method = POST,
@@ -33,5 +33,5 @@ class TranslateApiClient private (private val httpClient: Client[IO], url: Uri) 
 }
 
 object TranslateApiClient {
-  def apply(client: Client[IO], baseUri: Uri): TranslateApiClient = new TranslateApiClient(client, baseUri)
+  def apply(client: Client[IO], baseUri: String): TranslateApiClient = new TranslateApiClient(client, baseUri)
 }
