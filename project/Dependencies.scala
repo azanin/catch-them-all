@@ -59,4 +59,10 @@ object Dependencies {
 
   val mockServer = "com.dimafeng" %% "testcontainers-scala-mockserver" % testContainerV
 
+  val tepirOpenApi = "com.softwaremill.sttp.tapir" %% "tapir-openapi-docs" % tapirV
+
+  val tapirOpenApiCirce = "com.softwaremill.sttp.tapir" %% "tapir-openapi-circe-yaml" % tapirV
+
+  val tapirSwagger = "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-http4s" % tapirV
+
 }
