@@ -8,7 +8,7 @@ import org.http4s.headers.`Content-Type`
 import Json._
 import api.http.clients.data.TranslateShakespeareResponse.ShakespeareResponse
 
-class TranslateClient private (private val httpClient: Client[IO], url: Uri) {
+class TranslateApiClient private (private val httpClient: Client[IO], url: Uri) {
 
   def translate(text: String): IO[ShakespeareResponse] = {
     val targetUri = url.withPath(s"/translate/shakespeare.json")
@@ -27,6 +27,6 @@ class TranslateClient private (private val httpClient: Client[IO], url: Uri) {
   }
 }
 
-object TranslateClient {
-  def apply(client: Client[IO], baseUri: Uri): TranslateClient = new TranslateClient(client, baseUri)
+object TranslateApiClient {
+  def apply(client: Client[IO], baseUri: Uri): TranslateApiClient = new TranslateApiClient(client, baseUri)
 }
