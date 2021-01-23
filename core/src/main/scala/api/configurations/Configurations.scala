@@ -13,6 +13,9 @@ object Configurations {
   val httpRequestTimeout: Duration = 4 seconds
   val httpConnectTimeout: Duration = 5 seconds
 
+  val serverHost = "0.0.0.0"
+  val serverPort = 80
+
   def load: IO[Configurations] = (IO(sys.env("POKEMON_HOST")), IO(sys.env("TRANSLATE_HOST"))).mapN {
     (pokemonUri: String, translateUri: String) =>
       Configurations(Uri.unsafeFromString(pokemonUri), Uri.unsafeFromString(translateUri))
