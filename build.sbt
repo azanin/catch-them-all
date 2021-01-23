@@ -33,7 +33,7 @@ lazy val commonSettings = Seq(
 lazy val core = project
   .in(file("core"))
   .settings(commonSettings)
-  .settings(name := "scalaApi")
+  .settings(name := projectName)
   .settings(parallelExecution in Test := false)
   .settings(test in assembly := {})
   .settings(assemblyJarName in assembly := projectName + ".jar")
@@ -81,7 +81,7 @@ lazy val tests = project
   .settings(dockerfile in docker := dockerFile((assembly in core).value))
   .dependsOn(core)
 
-lazy val scalaApi = project
+lazy val catchThemAll = project
   .in(file("."))
   .enablePlugins(NoPublishPlugin)
   .aggregate(core, tests)
