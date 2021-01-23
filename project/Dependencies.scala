@@ -13,6 +13,8 @@ object Dependencies {
 
   val circeV = "0.13.0"
 
+  val catsEffectScalaTestV = "0.4.2"
+
   val scalaTest = "org.scalatest" %% "scalatest" % scalaTestV
 
   val catsEffect = "org.typelevel" %% "cats-effect" % catsV
@@ -30,4 +32,7 @@ object Dependencies {
   val http4sCirce = "org.http4s" %% "http4s-circe" % http4sV
 
   val circeLiteral = "io.circe" %% "circe-literal" % circeV
+
+  val cateEffectTesting = "com.codecommit" %% "cats-effect-testing-scalatest" % catsEffectScalaTestV
+
 }
