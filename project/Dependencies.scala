@@ -15,6 +15,8 @@ object Dependencies {
 
   val catsEffectScalaTestV = "0.4.2"
 
+  val tapirV = "0.17.7"
+
   val scalaTest = "org.scalatest" %% "scalatest" % scalaTestV
 
   val catsEffect = "org.typelevel" %% "cats-effect" % catsV
@@ -34,5 +36,11 @@ object Dependencies {
   val circeLiteral = "io.circe" %% "circe-literal" % circeV
 
   val cateEffectTesting = "com.codecommit" %% "cats-effect-testing-scalatest" % catsEffectScalaTestV
+
+  val tapirCore = "com.softwaremill.sttp.tapir" %% "tapir-core" % tapirV
+
+  val tapirHttp4sServer = "com.softwaremill.sttp.tapir" %% "tapir-http4s-server" % tapirV
+
+  val tapirJsonCirce = "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % tapirV
 
 }

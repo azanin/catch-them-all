@@ -20,6 +20,9 @@ lazy val commonSettings = Seq(
   addCompilerPlugin(kindProjector),
   addCompilerPlugin(betterMonadicFor),
   libraryDependencies ++= Seq(
+    tapirCore,
+    tapirHttp4sServer,
+    tapirJsonCirce,
     http4sServer,
     http4sCirce,
     http4sDsl,
