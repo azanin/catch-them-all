@@ -43,4 +43,6 @@ object Dependencies {
 
   val tapirJsonCirce = "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % tapirV
 
+  val circeGeneric = "io.circe" %% "circe-generic" % circeV,
+
 }

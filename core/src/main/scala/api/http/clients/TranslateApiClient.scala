@@ -12,7 +12,7 @@ trait TranslateApi {
   def translate(text: String): IO[ShakespeareResponse]
 }
 
-class TranslateApiClient private (private val httpClient: Client[IO], url: Uri) {
+class TranslateApiClient private (private val httpClient: Client[IO], url: Uri) extends TranslateApi {
 
   def translate(text: String): IO[ShakespeareResponse] = {
     val targetUri = url.withPath(s"/translate/shakespeare.json")

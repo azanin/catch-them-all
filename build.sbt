@@ -30,6 +30,7 @@ lazy val commonSettings = Seq(
     catsEffect,
     circeLiteral,
     scalaTest,
+    circeGeneric,
     cateEffectTesting
   )
 )
