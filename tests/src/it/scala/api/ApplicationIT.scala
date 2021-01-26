@@ -3,8 +3,11 @@ package api
 import cats.effect.testing.scalatest.AsyncIOSpec
 import cats.effect.{ Blocker, IO }
 import com.dimafeng.testcontainers.{ Container, ForAllTestContainer, MultipleContainers }
+import io.circe.Json
+import io.circe.literal.JsonStringContext
 import org.http4s.Method.GET
 import org.http4s.Status.{ BadRequest, InternalServerError, NotFound, Ok, ServiceUnavailable, TooManyRequests }
+import org.http4s.circe._
 import org.http4s.{ Request, Uri }
 import org.mockserver.model.HttpRequest.request
 import org.mockserver.model.HttpResponse.response
@@ -21,17 +24,17 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
 
   "Happy path: 200 status" in {
 
-    val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
-      val pokemoneName          = "ditto"
-      val speciesName           = "ditto"
-      val description           = "a simple description"
-      val translatedDescription = "translated description"
+    val pokemonName           = "ditto"
+    val speciesName           = "ditto"
+    val description           = "a simple description"
+    val translatedDescription = "translated description"
 
+    val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
       val expectations =
         for {
           exp1 <- IO(
                     mockServerClient
-                      .when(request().withPath("/pokemon/" + pokemoneName))
+                      .when(request().withPath("/pokemon/" + pokemonName))
                       .respond(response().withBody(Expectations.pokemonReponse(speciesName)))
                   )
           exp2 <- IO(
@@ -49,17 +52,21 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
       val httpRequest: Request[IO] = Request(
         method = GET,
         uri = Uri.unsafeFromString(
-          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemoneName"
+          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemonName"
         )
       )
 
       for {
         _        <- expectations
-        response <- httpClient.run(httpRequest).use(r => IO(r))
+        response <- httpClient.run(httpRequest).use(r => r.as[Json].map(json => (r.status, json)))
       } yield response
     }
 
-    actual.asserting(response => assert(response.status == Ok))
+    val expectedBody = json"""{"name": $pokemonName, "description":$translatedDescription}"""
+
+    actual.asserting { case (status, _) => assert(status == Ok) }
+    actual.asserting { case (_, body) => assert(body == expectedBody) }
+
   }
 
   "Wrong pokemon name: 400 status" in {
@@ -85,13 +92,13 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
   "Not existing pokemon: return 404 status" in {
 
     val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
-      val pokemoneName = "notexisting"
+      val pokemonName = "notexisting"
 
       val expectations =
         for {
           exp1 <- IO(
                     mockServerClient
-                      .when(request().withPath("/pokemon/" + pokemoneName))
+                      .when(request().withPath("/pokemon/" + pokemonName))
                       .respond(response().withStatusCode(404))
                   )
         } yield exp1
@@ -99,7 +106,7 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
       val httpRequest: Request[IO] = Request(
         method = GET,
         uri = Uri.unsafeFromString(
-          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemoneName"
+          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemonName"
         )
       )
 
@@ -115,13 +122,13 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
   "Internal Server error: not parsable payload 500 status" in {
 
     val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
-      val pokemoneName = "ditto"
+      val pokemonName = "ditto"
 
       val expectations =
         for {
           exp1 <- IO(
                     mockServerClient
-                      .when(request().withPath("/pokemon/" + pokemoneName))
+                      .when(request().withPath("/pokemon/" + pokemonName))
                       .respond(response().withBody("not a json"))
                   )
         } yield exp1
@@ -129,7 +136,7 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
       val httpRequest: Request[IO] = Request(
         method = GET,
         uri = Uri.unsafeFromString(
-          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemoneName"
+          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemonName"
         )
       )
 
@@ -145,13 +152,13 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
   "Service unavailable: errors from dependent apis return 503 status" in {
 
     val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
-      val pokemoneName = "ditto"
+      val pokemonName = "ditto"
 
       val expectations =
         for {
           exp1 <- IO(
                     mockServerClient
-                      .when(request().withPath("/pokemon/" + pokemoneName))
+                      .when(request().withPath("/pokemon/" + pokemonName))
                       .respond(response().withStatusCode(500))
                   )
         } yield exp1
@@ -159,7 +166,7 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
       val httpRequest: Request[IO] = Request(
         method = GET,
         uri = Uri.unsafeFromString(
-          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemoneName"
+          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemonName"
         )
       )
 
@@ -175,13 +182,13 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
   "Too many requests: too many requesto to a dependent service return 429 status" in {
 
     val actual = Resources.clients(blocker).use { case (httpClient, mockServerClient) =>
-      val pokemoneName = "ditto"
+      val pokemonName = "ditto"
 
       val expectations =
         for {
           exp1 <- IO(
                     mockServerClient
-                      .when(request().withPath("/pokemon/" + pokemoneName))
+                      .when(request().withPath("/pokemon/" + pokemonName))
                       .respond(response().withStatusCode(429))
                   )
         } yield exp1
@@ -189,7 +196,7 @@ class ApplicationIT extends AsyncFreeSpec with ForAllTestContainer with AsyncIOS
       val httpRequest: Request[IO] = Request(
         method = GET,
         uri = Uri.unsafeFromString(
-          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemoneName"
+          s"http://${Resources.apiContainer.container.getHost}:${Resources.apiContainer.mappedPort(80)}/pokemon/$pokemonName"
         )
       )
 
