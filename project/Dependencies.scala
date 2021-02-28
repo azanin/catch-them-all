@@ -15,7 +15,7 @@ object Dependencies {
 
   val catsEffectScalaTestV = "0.5.1"
 
-  val tapirV = "0.17.12"
+  val tapirV = "0.17.13"
 
   val logbackV = "1.2.3"
 
