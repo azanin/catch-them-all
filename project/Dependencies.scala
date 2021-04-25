@@ -13,7 +13,7 @@ object Dependencies {
 
   val circeV = "0.13.0"
 
-  val catsEffectScalaTestV = "0.5.2"
+  val catsEffectScalaTestV = "0.5.3"
 
   val tapirV = "0.17.19"
 
