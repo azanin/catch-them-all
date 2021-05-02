@@ -4,15 +4,16 @@ import api.Endpoints
 import api.domain.ShakespeareDescription
 import api.domain.errors.Errors.ErrorInfo
 import api.services.TranslatePokemon
-import cats.effect.{ ContextShift, IO, Timer }
+import cats.effect.IO
 import org.http4s.HttpRoutes
 import sttp.tapir.server.http4s.Http4sServerInterpreter
 import cats.implicits._
 import api.domain.errors.Errors._
+import cats.effect.Temporal
 
 class PokemonRoutes private (private val translatePokemon: TranslatePokemon)(implicit
   CD: ContextShift[IO],
-  T: Timer[IO]
+  T: Temporal[IO]
 ) {
 
   val pokemonRoute: HttpRoutes[IO] =
@@ -32,7 +33,7 @@ class PokemonRoutes private (private val translatePokemon: TranslatePokemon)(imp
 
 object PokemonRoutes {
 
-  def make(translatePokemon: TranslatePokemon)(implicit CD: ContextShift[IO], T: Timer[IO]) = new PokemonRoutes(
+  def make(translatePokemon: TranslatePokemon)(implicit T: Temporal[IO]) = new PokemonRoutes(
     translatePokemon
   )
 }
