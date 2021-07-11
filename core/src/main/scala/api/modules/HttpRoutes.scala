@@ -2,7 +2,7 @@ package api.modules
 
 import api.Endpoints
 import api.routes.{ HealthCheckRoutes, PokemonRoutes }
-import cats.effect.{ ContextShift, IO, Timer }
+import cats.effect.IO
 import org.http4s.HttpApp
 import org.http4s.server.Router
 import org.http4s.server.middleware.{ RequestLogger, ResponseLogger }
@@ -11,8 +11,9 @@ import sttp.tapir.openapi.circe.yaml.RichOpenAPI
 import sttp.tapir.swagger.http4s.SwaggerHttp4s
 import cats.implicits._
 import org.http4s.implicits._
+import cats.effect.Temporal
 
-class HttpRoutes private (private val services: Services)(implicit C: ContextShift[IO], T: Timer[IO]) {
+class HttpRoutes private (private val services: Services)(implicit C: ContextShift[IO], T: Temporal[IO]) {
 
   private val pokemonRoute     = PokemonRoutes.make(services.translatePokemon).pokemonRoute
   private val healthCheckRoute = HealthCheckRoutes.make.healtcheckRoute
@@ -44,5 +45,5 @@ class HttpRoutes private (private val services: Services)(implicit C: ContextShi
 }
 
 object HttpRoutes {
-  def make(services: Services)(implicit C: ContextShift[IO], T: Timer[IO]) = new HttpRoutes(services)
+  def make(services: Services)(implicit T: Temporal[IO]) = new HttpRoutes(services)
 }
