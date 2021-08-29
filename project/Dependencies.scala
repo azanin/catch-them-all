@@ -19,7 +19,7 @@ object Dependencies {
 
   val logbackV = "1.2.5"
 
-  val testContainerV = "0.39.5"
+  val testContainerV = "0.39.6"
 
   val mockserverClientV = "5.11.2"
 
