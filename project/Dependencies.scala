@@ -3,7 +3,7 @@ import sbt._
 object Dependencies {
   val catsV = "2.5.3"
 
-  val kindProjectorV = "0.13.0"
+  val kindProjectorV = "0.13.1"
 
   val betterMonadicForV = "0.3.1"
 
