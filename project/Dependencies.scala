@@ -9,7 +9,7 @@ object Dependencies {
 
   val scalaTestV = "3.2.11"
 
-  val http4sV = "0.21.31"
+  val http4sV = "0.21.32"
 
   val circeV = "0.14.1"
 
