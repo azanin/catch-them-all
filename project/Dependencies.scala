@@ -17,7 +17,7 @@ object Dependencies {
 
   val tapirV = "0.17.20"
 
-  val logbackV = "1.2.10"
+  val logbackV = "1.2.11"
 
   val testContainerV = "0.40.2"
 
