@@ -21,7 +21,7 @@ object Dependencies {
 
   val testContainerV = "0.40.5"
 
-  val mockserverClientV = "5.13.1"
+  val mockserverClientV = "5.13.2"
 
   val scalaTest = "org.scalatest" %% "scalatest" % scalaTestV
 

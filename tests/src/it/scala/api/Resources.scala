@@ -15,7 +15,7 @@ object Resources {
   val networkAlias = "mockserver"
   val exposedPort  = 1080
 
-  lazy val mockServer = MockServerContainer("5.13.1").configure { c =>
+  lazy val mockServer = MockServerContainer("5.13.2").configure { c =>
     c.withNetwork(network)
     c.withNetworkAliases(networkAlias)
     c.withExposedPorts(exposedPort)
