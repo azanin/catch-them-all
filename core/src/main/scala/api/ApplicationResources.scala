@@ -3,7 +3,7 @@ package api
 import api.configurations.Configurations
 import cats.effect.{ ContextShift, IO }
 import org.http4s.client.Client
-import org.http4s.client.blaze.BlazeClientBuilder
+import org.http4s.blaze.client.BlazeClientBuilder
 import org.http4s.client.middleware.Logger
 
 import scala.concurrent.ExecutionContext
