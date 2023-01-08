@@ -7,7 +7,7 @@ object Dependencies {
 
   val betterMonadicForV = "0.3.1"
 
-  val scalaTestV = "3.2.14"
+  val scalaTestV = "3.2.15"
 
   val http4sV = "0.21.34"
 
