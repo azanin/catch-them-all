@@ -21,7 +21,7 @@ class TranslateApiClient private (private val httpClient: Client[IO], url: Strin
     val request = Request[IO](
       method = POST,
       uri = targetUri,
-      headers = Headers.of(`Content-Type`(MediaType.application.`x-www-form-urlencoded`))
+      headers = Headers(`Content-Type`(MediaType.application.`x-www-form-urlencoded`))
     ).withEntity(
       UrlForm(
         "text" -> text
