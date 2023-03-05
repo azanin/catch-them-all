@@ -11,7 +11,7 @@ object Dependencies {
 
   val http4sV = "0.21.34"
 
-  val circeV = "0.14.2"
+  val circeV = "0.14.5"
 
   val catsEffectScalaTestV = "0.5.4"
 
