@@ -1,7 +1,7 @@
 import sbt._
 
 object Dependencies {
-  val catsV = "2.5.5"
+  val catsV = "3.4.6"
 
   val kindProjectorV = "0.13.2"
 
