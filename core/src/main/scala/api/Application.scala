@@ -3,7 +3,7 @@ package api
 import api.configurations.Configurations
 import api.modules.{ HttpClients, HttpRoutes, Services }
 import cats.effect.{ ExitCode, IO, IOApp }
-import org.http4s.server.blaze.BlazeServerBuilder
+import org.http4s.blaze.server.BlazeServerBuilder
 
 import scala.concurrent.ExecutionContext
 
